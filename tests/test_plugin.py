@@ -5,4 +5,6 @@ def test_plugin_appends_to_markdown():
     """
     Test plugin appends to markdown.
     """
-    _ = DangerCoverage()
+    plugin = DangerCoverage()
+
+    plugin.report_coverage()

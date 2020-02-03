@@ -6,6 +6,7 @@ authors = ["Jakub Turek <jkbturek@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.7"
+pycobertura = "^0.10.5"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
