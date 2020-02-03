@@ -1,12 +1,11 @@
-from unittest.mock import patch
-
-from danger_py_cov import DangerCoverage
 from danger_python.danger import Danger, Violation
 
+from danger_py_cov import DangerCoverage
 
-def test_plugin_appends_to_markdown(danger: Danger):
+
+def test_plugin_appends_coverage_results_to_markdown(danger: Danger):
     """
-    Test plugin appends to markdown.
+    Test plugin appends coverage results to markdown.
     """
     plugin = DangerCoverage()
     plugin.report_coverage()

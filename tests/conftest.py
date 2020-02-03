@@ -2,7 +2,6 @@ from typing import Any, Dict, Iterator, List
 from unittest.mock import patch
 
 import pytest
-
 from danger_python.danger import Danger
 from danger_python.models import DangerDSLJSONType
 
