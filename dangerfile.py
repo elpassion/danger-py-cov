@@ -1,3 +1,3 @@
 import danger_py_cov
 
-report_coverage("cov.xml")
+danger_py_cov.report_coverage("cov.xml")
