@@ -1,4 +1,4 @@
-from typing import Iterable, List, Optional
+from typing import List, Optional
 
 from danger_python.plugins import DangerPlugin
 
@@ -9,7 +9,7 @@ from danger_py_cov.report import CoverageReport
 class DangerCoverage(DangerPlugin):
     def report_coverage(self, report_path: str, sources_path: Optional[str] = None):
         report = CoverageReport(report_path, source=sources_path)
-        report_entries = map(lambda f: entry_for_file(report, f), report.files())
+        report_entries = [entry_for_file(report, f) for f in report.files()]
         generated_report = generate_report(report_entries)
 
         for markdown in generated_report:
@@ -26,8 +26,8 @@ def entry_for_file(report: CoverageReport, filename: str) -> CoverageFile:
     )
 
 
-def generate_report(files: Iterable[CoverageFile]) -> List[str]:
-    coverage = f"{total_coverage(list(files)):.2f}%"
+def generate_report(files: List[CoverageFile]) -> List[str]:
+    coverage = f"{total_coverage(files):.2f}%"
     return [f"### Current coverage is `{coverage}`"]
 
 
