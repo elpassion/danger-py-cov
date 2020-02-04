@@ -1,8 +1,6 @@
 language: python
 python:
     - "3.7"
-node_js:
-    - "10"
 cache:
     yarn: true
     pip: true
@@ -14,5 +12,7 @@ install:
 script:
     - poetry run pytest
 after_script:
+    - nvm install 10.16.0
+    - nvm use 10.16.0
     - yarn global add danger
     - poetry run danger-python ci
