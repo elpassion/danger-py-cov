@@ -28,9 +28,9 @@ class CoverageReport(Cobertura):
         return (int(covered_branches[0]), int(covered_branches[1]))
 
 
-def generate_report(report: CoverageReport) -> List[str]:
+def generate_report(report: CoverageReport, modified_files: List[str]) -> List[str]:
     report_entries = [entry_for_file(report, f) for f in report.files()]
-    return generate_report_for_files(report_entries)
+    return generate_report_for_files(report_entries, modified_files)
 
 
 def entry_for_file(report: CoverageReport, filename: str) -> CoverageFile:
@@ -43,12 +43,21 @@ def entry_for_file(report: CoverageReport, filename: str) -> CoverageFile:
     )
 
 
-def generate_report_for_files(files: List[CoverageFile]) -> List[str]:
-    coverage = f"{total_coverage(files):.2f}%"
-    return [f"### Current coverage is `{coverage}`"]
+def generate_report_for_files(
+    files: List[CoverageFile], modified_files: List[str]
+) -> List[str]:
+    coverage = f"{__total_coverage(files):.2f}%"
+    return [f"### Current coverage is `{coverage}`"] + __markdown_table(
+        files, modified_files
+    )
 
 
-def total_coverage(files: List[CoverageFile]) -> float:
+def __total_coverage(files: List[CoverageFile]) -> float:
+    hits, totals = zip(*map(__hits_and_totals, files))
+    return float(sum(hits)) * 100.0 / float(sum(totals))
+
+
+def __hits_and_totals(file: CoverageFile) -> Tuple[int, int]:
     statements = (
         "total_statements",
         "total_branches",
@@ -56,8 +65,28 @@ def total_coverage(files: List[CoverageFile]) -> float:
         "missed_branches",
     )
 
-    numbers = list(map(lambda s: sum(map(lambda f: getattr(f, s), files)), statements))
+    numbers = list(map(lambda s: getattr(file, s), statements))
     hits = numbers[0] + numbers[1] - numbers[2] - numbers[3]
     total = numbers[0] + numbers[1]
+    return hits, total
 
-    return float(hits) * 100.0 / float(total)
+
+def __markdown_table(files: List[CoverageFile], modified_files: List[str]) -> List[str]:
+    def is_modified(file: CoverageFile) -> bool:
+        return any(map(lambda f: f.endswith(file.name), modified_files))
+
+    filtered_files = sorted(list(filter(is_modified, files)), key=lambda f: f.name)
+
+    if not filtered_files:
+        return []
+
+    return ["| Files changed | Coverage |", "| --- | --- |"] + list(
+        map(__format_coverage, filtered_files)
+    )
+
+
+def __format_coverage(file: CoverageFile) -> str:
+    hits, totals = __hits_and_totals(file)
+    coverage = float(hits) * 100.0 / float(totals)
+
+    return f"| {file.name} | {coverage:.2f}% |"
