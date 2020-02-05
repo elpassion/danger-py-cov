@@ -1,9 +1,10 @@
 import xml.etree.ElementTree as ET
 from typing import Iterator, List, Optional, Tuple
 
+from jinja2 import Environment, PackageLoader, select_autoescape
 from pycobertura import Cobertura
 
-from .models import CoverageFile
+from .models import CoverageFile, CoverageFileChangeOutput, CoverageReportOutput
 
 
 class CoverageReport(Cobertura):
@@ -28,9 +29,16 @@ class CoverageReport(Cobertura):
         return (int(covered_branches[0]), int(covered_branches[1]))
 
 
-def generate_report(report: CoverageReport, modified_files: List[str]) -> List[str]:
+def generate_report(report: CoverageReport, modified_files: List[str]) -> str:
+    template_environment = Environment(
+        loader=PackageLoader("danger_py_cov", "templates"),
+        autoescape=select_autoescape([]),
+    )
+    template = template_environment.get_template("report.md.jinja")
     report_entries = [entry_for_file(report, f) for f in report.files()]
-    return generate_report_for_files(report_entries, modified_files)
+    return template.render(
+        report=generate_report_for_files(report_entries, modified_files)
+    )
 
 
 def entry_for_file(report: CoverageReport, filename: str) -> CoverageFile:
@@ -45,10 +53,10 @@ def entry_for_file(report: CoverageReport, filename: str) -> CoverageFile:
 
 def generate_report_for_files(
     files: List[CoverageFile], modified_files: List[str]
-) -> List[str]:
-    coverage = f"{__total_coverage(files):.2f}%"
-    return [f"### Current coverage is `{coverage}`"] + __markdown_table(
-        files, modified_files
+) -> CoverageReportOutput:
+    return CoverageReportOutput(
+        total_coverage=__total_coverage(files),
+        file_changes=__file_changes(files, modified_files),
     )
 
 
@@ -71,22 +79,17 @@ def __hits_and_totals(file: CoverageFile) -> Tuple[int, int]:
     return hits, total
 
 
-def __markdown_table(files: List[CoverageFile], modified_files: List[str]) -> List[str]:
+def __file_changes(
+    files: List[CoverageFile], modified_files: List[str]
+) -> List[CoverageFileChangeOutput]:
     def is_modified(file: CoverageFile) -> bool:
         return any(map(lambda f: f.endswith(file.name), modified_files))
 
-    filtered_files = sorted(list(filter(is_modified, files)), key=lambda f: f.name)
-
-    if not filtered_files:
-        return []
-
-    return ["| Files changed | Coverage |", "| --- | --- |"] + list(
-        map(__format_coverage, filtered_files)
-    )
+    return sorted(map(__file_output, filter(is_modified, files)), key=lambda f: f.name)
 
 
-def __format_coverage(file: CoverageFile) -> str:
+def __file_output(file: CoverageFile) -> CoverageFileChangeOutput:
     hits, totals = __hits_and_totals(file)
     coverage = float(hits) * 100.0 / float(totals)
 
-    return f"| {file.name} | {coverage:.2f}% |"
+    return CoverageFileChangeOutput(name=file.name, coverage=coverage)
