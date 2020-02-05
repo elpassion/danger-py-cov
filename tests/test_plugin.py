@@ -22,7 +22,7 @@ def test_plugin_appends_coverage_results_to_markdown(danger: Danger):
     assert danger.results.markdowns == [
         Violation(message="### Current coverage is `66.67%`"),
         Violation(message="| Files changed | Coverage |"),
-        Violation(message="| --- | --- |"),
+        Violation(message="| ------------- | -------- |"),
         Violation(message="| module_one.py | 71.43% |"),
         Violation(message="| module_three.py | 100.00% |"),
         Violation(message="| module_two.py | 0.00% |"),

@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import List
 
 
 @dataclass
@@ -8,3 +9,15 @@ class CoverageFile:
     missed_statements: int
     total_branches: int
     missed_branches: int
+
+
+@dataclass
+class CoverageFileChangeOutput:
+    name: str
+    coverage: float
+
+
+@dataclass
+class CoverageReportOutput:
+    total_coverage: float
+    file_changes: List[CoverageFileChangeOutput]

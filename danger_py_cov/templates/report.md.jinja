@@ -1,0 +1,10 @@
+### Current coverage is `{{ "%.2f"|format(report.total_coverage) }}%`
+{% for file_change in report.file_changes %}
+{% if loop.first %}
+| Files changed | Coverage |
+| ------------- | -------- |
+{% endif %}
+| {{ file_change.name }} | {{ "%.2f"|format(file_change.coverage) }}% |
+{% else %}
+No source changes affecting the coverage found
+{% endfor %}
