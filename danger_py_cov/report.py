@@ -29,17 +29,16 @@ class CoverageReport(Cobertura):
         return (int(covered_branches[0]), int(covered_branches[1]))
 
 
-def generate_report(report: CoverageReport, modified_files: List[str]) -> List[str]:
+def generate_report(report: CoverageReport, modified_files: List[str]) -> str:
     template_environment = Environment(
         loader=PackageLoader("danger_py_cov", "templates"),
         autoescape=select_autoescape([]),
     )
     template = template_environment.get_template("report.md.jinja")
     report_entries = [entry_for_file(report, f) for f in report.files()]
-    markdown = template.render(
+    return template.render(
         report=generate_report_for_files(report_entries, modified_files)
     )
-    return list(filter(None, markdown.splitlines()))
 
 
 def entry_for_file(report: CoverageReport, filename: str) -> CoverageFile:
