@@ -42,4 +42,5 @@ def test_plugin_does_not_print_table_if_there_are_no_changed_files(danger: Dange
 
     assert danger.results.markdowns == [
         Violation(message="### Current coverage is `66.67%`"),
+        Violation(message="No source changes affecting the coverage found"),
     ]

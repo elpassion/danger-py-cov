@@ -78,7 +78,7 @@ def __markdown_table(files: List[CoverageFile], modified_files: List[str]) -> Li
     filtered_files = sorted(list(filter(is_modified, files)), key=lambda f: f.name)
 
     if not filtered_files:
-        return []
+        return ["No source changes affecting the coverage found"]
 
     return ["| Files changed | Coverage |", "| --- | --- |"] + list(
         map(__format_coverage, filtered_files)
