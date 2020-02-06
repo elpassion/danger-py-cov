@@ -1,6 +1,6 @@
 # danger-py-cov
 
-The plugin parses the `.xml` coverage report and visualizes how the pull request affects the results. The report is produced  by tools such as [Coverage.py](https://coverage.readthedocs.io/en/coverage-5.0.3/#). 
+The plugin parses the `.xml` coverage report and visualizes how the pull request affects the results. 
 
 Example output:
 
