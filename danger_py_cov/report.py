@@ -4,7 +4,12 @@ from typing import Iterator, List, Optional, Tuple
 from jinja2 import Environment, PackageLoader, select_autoescape
 from pycobertura import Cobertura
 
-from .models import CoverageFile, CoverageFileChangeOutput, CoverageReportOutput
+from .models import (
+    CoverageFile,
+    CoverageFileChangeOutput,
+    CoverageReportOutput,
+    RenderedReport,
+)
 
 
 class CoverageReport(Cobertura):
@@ -29,16 +34,20 @@ class CoverageReport(Cobertura):
         return (int(covered_branches[0]), int(covered_branches[1]))
 
 
-def generate_report(report: CoverageReport, modified_files: List[str]) -> str:
+def generate_report(
+    report: CoverageReport, modified_files: List[str], minimum_coverage: Optional[float]
+) -> RenderedReport:
     template_environment = Environment(
         loader=PackageLoader("danger_py_cov", "templates"),
         autoescape=select_autoescape([]),
     )
     template = template_environment.get_template("report.md.jinja")
     report_entries = [entry_for_file(report, f) for f in report.files()]
-    return template.render(
-        report=generate_report_for_files(report_entries, modified_files)
-    )
+    output = generate_report_for_files(report_entries, modified_files)
+    markdown = template.render(report=output)
+    fail = __fail(output, minimum_coverage)
+
+    return RenderedReport(markdown=markdown, fail=fail)
 
 
 def entry_for_file(report: CoverageReport, filename: str) -> CoverageFile:
@@ -93,3 +102,12 @@ def __file_output(file: CoverageFile) -> CoverageFileChangeOutput:
     coverage = float(hits) * 100.0 / float(totals)
 
     return CoverageFileChangeOutput(name=file.name, coverage=coverage)
+
+
+def __fail(
+    output: CoverageReportOutput, minimum_coverage: Optional[float]
+) -> Optional[str]:
+    if not minimum_coverage or output.total_coverage >= minimum_coverage:
+        return None
+
+    return f"Minimum required coverage `{minimum_coverage:.2f}%` not met"

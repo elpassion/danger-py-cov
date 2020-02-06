@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List
+from typing import List, Optional
 
 
 @dataclass
@@ -21,3 +21,9 @@ class CoverageFileChangeOutput:
 class CoverageReportOutput:
     total_coverage: float
     file_changes: List[CoverageFileChangeOutput]
+
+
+@dataclass
+class RenderedReport:
+    markdown: str
+    fail: Optional[str]
