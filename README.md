@@ -23,3 +23,7 @@ import danger_py_cov
 
 danger_py_cov.report_coverage("cov.xml", minimum_coverage=95.0)
 ```
+
+## License
+
+`danger-py-cov` is released under an MIT license. See [LICENSE](https://github.com/elpassion/danger-py-cov/blob/master/LICENSE) for more information.
