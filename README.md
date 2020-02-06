@@ -16,6 +16,16 @@ The plugin parses the `.xml` coverage report and visualizes how the pull request
 
 ## Usage
 
+Run the tests using the runner that supports XML reporting. For [pytest](https://docs.pytest.org/en/latest/) and [pytest-cov](https://pypi.org/project/pytest-cov/) add following to the `setup.cfg`:
+
+```ini
+[tool:pytest]
+addopts = --cov --cov-report xml:cov.xml --cov-report term
+
+[coverage:run]
+branch = True
+```
+
 Add following to the `dangerfile.py`:
 
 ```python
@@ -23,6 +33,8 @@ import danger_py_cov
 
 danger_py_cov.report_coverage("cov.xml", minimum_coverage=95.0)
 ```
+
+Make sure to run `pytest` before running `danger-python`. 
 
 ## Development
 
