@@ -17,7 +17,14 @@ def emoji_for_coverage(
 
 
 def calculate_coverage(files: List[CoverageFile]) -> float:
+    default_coverage = 100.0
+    if not files:
+        return default_coverage
+
     hits, totals = zip(*map(__hits_and_totals, files))
+    if not totals:
+        return default_coverage
+
     return float(sum(hits)) * 100.0 / float(sum(totals))
 
 
