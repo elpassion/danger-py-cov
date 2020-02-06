@@ -3,6 +3,7 @@ from typing import List, Optional, Tuple
 
 from jinja2 import Environment, PackageLoader, select_autoescape
 
+from .calculations import emoji_for_coverage
 from .cobertura import CoberturaWrapper
 from .models import (
     CoverageFile,
@@ -89,14 +90,7 @@ def __file_output(
 ) -> CoverageFileChangeOutput:
     hits, totals = __hits_and_totals(file)
     coverage = float(hits) * 100.0 / float(totals)
-    emoji = configuration.none_emoji
-
-    if coverage >= configuration.high_threshold:
-        emoji = configuration.high_emoji
-    elif coverage >= configuration.medium_threshold:
-        emoji = configuration.medium_emoji
-    elif coverage >= configuration.low_threshold:
-        emoji = configuration.low_emoji
+    emoji = emoji_for_coverage(coverage, configuration)
 
     return CoverageFileChangeOutput(name=file.name, coverage=coverage, emoji=emoji)
 
