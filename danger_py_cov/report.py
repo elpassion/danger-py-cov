@@ -1,9 +1,9 @@
 import functools
-from typing import List, Optional, Tuple
+from typing import List, Optional
 
 from jinja2 import Environment, PackageLoader, select_autoescape
 
-from .calculations import emoji_for_coverage
+from .calculations import calculate_coverage, emoji_for_coverage
 from .cobertura import CoberturaWrapper
 from .models import (
     CoverageFile,
@@ -49,28 +49,9 @@ def generate_report_for_files(
     configuration: DangerCoverageConfiguration,
 ) -> CoverageReportOutput:
     return CoverageReportOutput(
-        total_coverage=__total_coverage(files),
+        total_coverage=calculate_coverage(files),
         file_changes=__file_changes(files, modified_files, configuration),
     )
-
-
-def __total_coverage(files: List[CoverageFile]) -> float:
-    hits, totals = zip(*map(__hits_and_totals, files))
-    return float(sum(hits)) * 100.0 / float(sum(totals))
-
-
-def __hits_and_totals(file: CoverageFile) -> Tuple[int, int]:
-    statements = (
-        "total_statements",
-        "total_branches",
-        "missed_statements",
-        "missed_branches",
-    )
-
-    numbers = list(map(lambda s: getattr(file, s), statements))
-    hits = numbers[0] + numbers[1] - numbers[2] - numbers[3]
-    total = numbers[0] + numbers[1]
-    return hits, total
 
 
 def __file_changes(
@@ -88,8 +69,7 @@ def __file_changes(
 def __file_output(
     configuration: DangerCoverageConfiguration, file: CoverageFile
 ) -> CoverageFileChangeOutput:
-    hits, totals = __hits_and_totals(file)
-    coverage = float(hits) * 100.0 / float(totals)
+    coverage = calculate_coverage([file])
     emoji = emoji_for_coverage(coverage, configuration)
 
     return CoverageFileChangeOutput(name=file.name, coverage=coverage, emoji=emoji)

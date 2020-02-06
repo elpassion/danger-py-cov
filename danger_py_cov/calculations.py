@@ -1,4 +1,6 @@
-from .models import DangerCoverageConfiguration
+from typing import List, Tuple
+
+from .models import CoverageFile, DangerCoverageConfiguration
 
 
 def emoji_for_coverage(
@@ -12,3 +14,22 @@ def emoji_for_coverage(
         return configuration.low_emoji
     else:
         return configuration.none_emoji
+
+
+def calculate_coverage(files: List[CoverageFile]) -> float:
+    hits, totals = zip(*map(__hits_and_totals, files))
+    return float(sum(hits)) * 100.0 / float(sum(totals))
+
+
+def __hits_and_totals(file: CoverageFile) -> Tuple[int, int]:
+    statements = (
+        "total_statements",
+        "total_branches",
+        "missed_statements",
+        "missed_branches",
+    )
+
+    numbers = list(map(lambda s: getattr(file, s), statements))
+    hits = numbers[0] + numbers[1] - numbers[2] - numbers[3]
+    total = numbers[0] + numbers[1]
+    return hits, total
