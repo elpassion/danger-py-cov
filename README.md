@@ -24,6 +24,21 @@ import danger_py_cov
 danger_py_cov.report_coverage("cov.xml", minimum_coverage=95.0)
 ```
 
+## Development
+
+To develop the new features, clone the repository and then run:
+
+```sh
+# install dependencies
+poetry install 
+# activate virtual environment
+poetry shell 
+# add pre-commit checks
+pre-commit install -f -t pre-commit 
+# run the test suite
+pytest 
+```
+
 ## License
 
 `danger-py-cov` is released under an MIT license. See [LICENSE](https://github.com/elpassion/danger-py-cov/blob/master/LICENSE) for more information.
