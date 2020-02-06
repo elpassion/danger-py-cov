@@ -22,10 +22,12 @@ def calculate_coverage(files: List[CoverageFile]) -> float:
         return default_coverage
 
     hits, totals = zip(*map(__hits_and_totals, files))
-    if not totals:
+    sum_totals = float(sum(totals))
+
+    if sum_totals == 0:
         return default_coverage
 
-    return float(sum(hits)) * 100.0 / float(sum(totals))
+    return float(sum(hits)) * 100.0 / sum_totals
 
 
 def __hits_and_totals(file: CoverageFile) -> Tuple[int, int]:
