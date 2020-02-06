@@ -3,6 +3,17 @@ from typing import List, Optional
 
 
 @dataclass
+class DangerCoverageConfiguration:
+    low_threshold: float = 0.25
+    medium_threshold: float = 0.5
+    high_threshold: float = 0.8
+    none_emoji: str = ":skull:"
+    low_emoji: str = ":no_entry_sign:"
+    medium_emoji: str = ":warning:"
+    high_emoji: str = ":white_check_mark:"
+
+
+@dataclass
 class CoverageFile:
     name: str
     total_statements: int
@@ -15,6 +26,7 @@ class CoverageFile:
 class CoverageFileChangeOutput:
     name: str
     coverage: float
+    emoji: str
 
 
 @dataclass

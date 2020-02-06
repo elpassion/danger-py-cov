@@ -1,3 +1,4 @@
+import functools
 import xml.etree.ElementTree as ET
 from typing import Iterator, List, Optional, Tuple
 
@@ -8,6 +9,7 @@ from .models import (
     CoverageFile,
     CoverageFileChangeOutput,
     CoverageReportOutput,
+    DangerCoverageConfiguration,
     RenderedReport,
 )
 
@@ -35,7 +37,10 @@ class CoverageReport(Cobertura):
 
 
 def generate_report(
-    report: CoverageReport, modified_files: List[str], minimum_coverage: Optional[float]
+    report: CoverageReport,
+    modified_files: List[str],
+    minimum_coverage: Optional[float],
+    configuration: DangerCoverageConfiguration,
 ) -> RenderedReport:
     template_environment = Environment(
         loader=PackageLoader("danger_py_cov", "templates"),
@@ -43,7 +48,7 @@ def generate_report(
     )
     template = template_environment.get_template("report.md.jinja")
     report_entries = [entry_for_file(report, f) for f in report.files()]
-    output = generate_report_for_files(report_entries, modified_files)
+    output = generate_report_for_files(report_entries, modified_files, configuration)
     markdown = template.render(report=output)
     fail = __fail(output, minimum_coverage)
 
@@ -61,11 +66,13 @@ def entry_for_file(report: CoverageReport, filename: str) -> CoverageFile:
 
 
 def generate_report_for_files(
-    files: List[CoverageFile], modified_files: List[str]
+    files: List[CoverageFile],
+    modified_files: List[str],
+    configuration: DangerCoverageConfiguration,
 ) -> CoverageReportOutput:
     return CoverageReportOutput(
         total_coverage=__total_coverage(files),
-        file_changes=__file_changes(files, modified_files),
+        file_changes=__file_changes(files, modified_files, configuration),
     )
 
 
@@ -89,19 +96,32 @@ def __hits_and_totals(file: CoverageFile) -> Tuple[int, int]:
 
 
 def __file_changes(
-    files: List[CoverageFile], modified_files: List[str]
+    files: List[CoverageFile],
+    modified_files: List[str],
+    configuration: DangerCoverageConfiguration,
 ) -> List[CoverageFileChangeOutput]:
     def is_modified(file: CoverageFile) -> bool:
         return any(map(lambda f: f.endswith(file.name), modified_files))
 
-    return sorted(map(__file_output, filter(is_modified, files)), key=lambda f: f.name)
+    file_output = functools.partial(__file_output, configuration)
+    return sorted(map(file_output, filter(is_modified, files)), key=lambda f: f.name)
 
 
-def __file_output(file: CoverageFile) -> CoverageFileChangeOutput:
+def __file_output(
+    configuration: DangerCoverageConfiguration, file: CoverageFile
+) -> CoverageFileChangeOutput:
     hits, totals = __hits_and_totals(file)
     coverage = float(hits) * 100.0 / float(totals)
+    emoji = configuration.none_emoji
 
-    return CoverageFileChangeOutput(name=file.name, coverage=coverage)
+    if coverage >= configuration.high_threshold:
+        emoji = configuration.high_emoji
+    elif coverage >= configuration.medium_threshold:
+        emoji = configuration.medium_emoji
+    elif coverage >= configuration.low_threshold:
+        emoji = configuration.low_emoji
+
+    return CoverageFileChangeOutput(name=file.name, coverage=coverage, emoji=emoji)
 
 
 def __fail(
