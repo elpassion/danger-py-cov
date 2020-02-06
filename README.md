@@ -18,7 +18,7 @@ Example output:
 
 Add following to the `dangerfile.py`:
 
-```sh
+```python
 import danger_py_cov
 
 danger_py_cov.report_coverage("cov.xml", minimum_coverage=95.0)
