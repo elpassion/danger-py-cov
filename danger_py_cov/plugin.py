@@ -2,8 +2,9 @@ from typing import Optional
 
 from danger_python.plugins import DangerPlugin
 
+from danger_py_cov.cobertura import CoberturaWrapper
 from danger_py_cov.models import DangerCoverageConfiguration
-from danger_py_cov.report import CoverageReport, generate_report
+from danger_py_cov.report import generate_report
 
 
 class DangerCoverage(DangerPlugin):
@@ -14,7 +15,7 @@ class DangerCoverage(DangerPlugin):
         minimum_coverage: Optional[float] = None,
         configuration: Optional[DangerCoverageConfiguration] = None,
     ):
-        report = CoverageReport(report_path, source=sources_path)
+        report = CoberturaWrapper(report_path, source=sources_path)
         modified_files = self.danger.git.modified_files + self.danger.git.created_files
 
         rendered_report = generate_report(
