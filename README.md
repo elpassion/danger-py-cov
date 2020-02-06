@@ -2,7 +2,7 @@
 
 The plugin parses the `.xml` coverage report and visualizes how the pull request affects the results. 
 
-Example output:
+## Example output
 
 ### Current coverage is `100.00%`
 
@@ -14,7 +14,7 @@ Example output:
 | plugin.py | `100.00%` | :white_check_mark: |
 | report.py | `100.00%` | :white_check_mark: |
 
-### Usage
+## Usage
 
 Add following to the `dangerfile.py`:
 
