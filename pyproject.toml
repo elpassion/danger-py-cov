@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "danger-python plugin for displaying code coverage changes"
 authors = [
     "Jakub Turek <jkbturek@gmail.com>",
-     "EL Passion <hello@elpassion.com>"
+    "EL Passion <hello@elpassion.com>"
 ]
 
 [tool.poetry.dependencies]
