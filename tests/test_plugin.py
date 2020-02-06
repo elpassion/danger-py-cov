@@ -21,11 +21,11 @@ def test_plugin_appends_coverage_results_to_markdown(danger: Danger):
 
     expected_message = (
         "### Current coverage is `66.67%`\n"
-        "| Files changed | Coverage |\n"
-        "| ------------- | -------- |\n"
-        "| module_one.py | `71.43%` |\n"
-        "| module_three.py | `100.00%` |\n"
-        "| module_two.py | `0.00%` |\n"
+        "| Files changed | Coverage | - |\n"
+        "| ------------- | -------- | --- |\n"
+        "| module_one.py | `71.43%` | :warning: |\n"
+        "| module_three.py | `100.00%` | :white_check_mark: |\n"
+        "| module_two.py | `0.00%` | :skull: |\n"
     )
 
     assert danger.results.markdowns == [Violation(message=expected_message)]

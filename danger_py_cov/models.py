@@ -4,9 +4,9 @@ from typing import List, Optional
 
 @dataclass
 class DangerCoverageConfiguration:
-    low_threshold: float = 0.25
-    medium_threshold: float = 0.5
-    high_threshold: float = 0.8
+    low_threshold: float = 25.0
+    medium_threshold: float = 50.0
+    high_threshold: float = 80.0
     none_emoji: str = ":skull:"
     low_emoji: str = ":no_entry_sign:"
     medium_emoji: str = ":warning:"
