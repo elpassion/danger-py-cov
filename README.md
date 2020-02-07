@@ -3,7 +3,7 @@
 The plugin parses the `.xml` coverage report and visualizes how the pull request affects the results. 
 
 <h3 align="center">
-  <a href="https://elpassion.com">
+  <a href="https://www.elpassion.com">
     <img src="/assets/readme/elpassion.png" alt="Find your EL Passion"/>
   </a>
 </h3>
