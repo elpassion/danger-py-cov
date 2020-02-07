@@ -132,7 +132,7 @@ description = ""
 name = "danger-python"
 optional = false
 python-versions = "^3.7"
-version = "0.0.1"
+version = "0.1.0"
 
 [package.dependencies]
 click = "^7.0"
@@ -140,10 +140,9 @@ click-default-group = "^1.2.2"
 pydantic = "^1.4"
 
 [package.source]
-reference = "23516b8c82136a4f980b153a2512fc2472f030c7"
+reference = "28b4f1f5e33e5f744ccd690ee224fd8760bc5322"
 type = "git"
-url = "https://github.com/turekj/python.git"
-
+url = "https://github.com/danger/python.git"
 [[package]]
 category = "dev"
 description = "Pythonic argument parser, that will make you smile"
@@ -652,7 +651,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools"]
 
 [metadata]
-content-hash = "9c9d12c1d53cd8e1c80632240bf01005a7c117f6f9209d2e5bd34cc0d4fb010f"
+content-hash = "35d74e2efab8f96d886f5086ab6ab0280b4e5480e8fbff3841030b703dd26f4b"
 python-versions = "^3.7"
 
 [metadata.files]
