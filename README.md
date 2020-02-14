@@ -1,3 +1,7 @@
+[![PyPI](https://img.shields.io/pypi/v/danger-py-cov)](https://pypi.org/project/danger-py-cov/)
+![Python versions](https://img.shields.io/pypi/pyversions/danger-py-cov)
+[![Build Status](https://travis-ci.org/elpassion/danger-py-cov.svg?branch=master)](https://travis-ci.org/elpassion/danger-py-cov)
+
 # danger-py-cov
 
 The plugin parses the `.xml` coverage report and visualizes how the pull request affects the results. 
@@ -31,6 +35,22 @@ addopts = --cov --cov-report xml:cov.xml --cov-report term
 
 [coverage:run]
 branch = True
+```
+
+## Installation
+
+```sh
+# install danger-js
+npm install -g danger
+# install danger-python
+pip install danger-python
+# install danger-py-cov
+pip install danger-py-cov
+# modify dangerfile.py to include plugin
+# run the tests with coverage report enabled
+pytest --cov --cov-report xml:cov.xml --cov-report term
+# run danger-python
+danger-python pr https://github.com/elpassion/danger-py-cov/pull/2
 ```
 
 Add following to the `dangerfile.py`:
