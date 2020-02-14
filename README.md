@@ -37,6 +37,22 @@ addopts = --cov --cov-report xml:cov.xml --cov-report term
 branch = True
 ```
 
+## Installation
+
+```sh
+# install danger-js
+npm install -g danger
+# install danger-python
+pip install danger-python
+# install danger-py-cov
+pip install danger-py-cov
+# modify dangerfile.py to include plugin
+# run the tests with coverage report enabled
+pytest --cov --cov-report xml:cov.xml --cov-report term
+# run danger-python
+danger-python pr https://github.com/elpassion/danger-py-cov/pull/2
+```
+
 Add following to the `dangerfile.py`:
 
 ```python
