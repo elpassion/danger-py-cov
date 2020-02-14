@@ -1,3 +1,7 @@
+[![PyPI](https://img.shields.io/pypi/v/danger-py-cov)](https://pypi.org/project/danger-py-cov/)
+![Python versions](https://img.shields.io/pypi/pyversions/danger-py-cov)
+[![Build Status](https://travis-ci.org/elpassion/danger-py-cov.svg?branch=master)](https://travis-ci.org/elpassion/danger-py-cov)
+
 # danger-py-cov
 
 The plugin parses the `.xml` coverage report and visualizes how the pull request affects the results. 
