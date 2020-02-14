@@ -128,21 +128,17 @@ toml = ["toml"]
 
 [[package]]
 category = "dev"
-description = ""
+description = "Write your Dangerfiles in Python."
 name = "danger-python"
 optional = false
-python-versions = "^3.7"
+python-versions = ">=3.7,<4.0"
 version = "0.1.0"
 
 [package.dependencies]
-click = "^7.0"
-click-default-group = "^1.2.2"
-pydantic = "^1.4"
+click = ">=7.0,<8.0"
+click-default-group = ">=1.2.2,<2.0.0"
+pydantic = ">=1.4,<2.0"
 
-[package.source]
-reference = "28b4f1f5e33e5f744ccd690ee224fd8760bc5322"
-type = "git"
-url = "https://github.com/danger/python.git"
 [[package]]
 category = "dev"
 description = "Pythonic argument parser, that will make you smile"
@@ -651,7 +647,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools"]
 
 [metadata]
-content-hash = "35d74e2efab8f96d886f5086ab6ab0280b4e5480e8fbff3841030b703dd26f4b"
+content-hash = "3a4f5279eee271a2978801719c6d234a16c234c91ed66b5b91034c0018becd5c"
 python-versions = "^3.7"
 
 [metadata.files]
@@ -727,7 +723,10 @@ coverage = [
     {file = "coverage-5.0.3-cp39-cp39m-win_amd64.whl", hash = "sha256:da93027835164b8223e8e5af2cf902a4c80ed93cb0909417234f4a9df3bcd9af"},
     {file = "coverage-5.0.3.tar.gz", hash = "sha256:77afca04240c40450c331fa796b3eab6f1e15c5ecf8bf2b8bee9706cd5452fef"},
 ]
-danger-python = []
+danger-python = [
+    {file = "danger-python-0.1.0.tar.gz", hash = "sha256:b3a6d9affbd504548d3baf95fe1fd2527785e6ec0d48249475f16dfa14b13f92"},
+    {file = "danger_python-0.1.0-py3-none-any.whl", hash = "sha256:7c37a6efd4fb10c6a75d1eee3e78d5746c2c1f349e17f4259b2beba90701c790"},
+]
 docopt = [
     {file = "docopt-0.6.2.tar.gz", hash = "sha256:49b3a825280bd66b3aa83585ef59c4a8c82f2c8a522dbe754a8bc8d08c85c491"},
 ]
